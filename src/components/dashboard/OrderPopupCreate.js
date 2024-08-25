@@ -1,4 +1,5 @@
 import React from "react";
+import ElementProduct from "./element_product";
 
 function OrderPopupCreate() {
     const initialProductos = [
@@ -6,19 +7,35 @@ function OrderPopupCreate() {
             "nombre": "Abrazadera F 120x300 mm",
             "precio": "359.83",
             "cantidad":"5"
-        },
-        {
-            "nombre": "Aspirador de iones de litio",
-            "precio": "1,696.50",
-            "cantidad":"7"
-        },
-        {
-            "nombre": "Alicate de boca recta 10",
-            "precio": "138.97",
-            "cantidad":"3"
         }
     ]
-    const [productosPedido, setProductosPedidos] = React.useState()
+    const [productosPedido, setProductosPedidos] = React.useState(initialProductos)
+    const [nombreProducto, setNombreProducto] = React.useState()
+    const [precioProducto, setPrecioProducto] = React.useState()
+    const [cantidadProducto, setCantidadProducto] = React.useState()
+  
+
+    function handleAddProduct(e) {
+        e.preventDefault()
+        if(nombreProducto !== "" && precioProducto !== "" && cantidadProducto !== "") {
+            setProductosPedidos([{
+                "nombre": nombreProducto,
+                "precio": precioProducto,
+                "cantidad":cantidadProducto
+                }, ...productosPedido]);
+        }else{
+            alert('Hace falta un campo')
+        }
+    }
+    function handleOnChange(e) {
+        if(e.target.id === "nombreProducto") {
+            setNombreProducto(e.target.value)
+        }else if(e.target.id === "precioProducto"){
+            setPrecioProducto(e.target.value)
+        }else if(e.target.id === "cantidadProducto"){
+            setCantidadProducto(e.target.value)
+        }
+    }
     return(
         <>
             <div className="popup absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
@@ -46,24 +63,55 @@ function OrderPopupCreate() {
                         </div>
                     </div>
                     <div className="product-list">
-                        <div class="overflow-x-auto">
-                            <table class="min-w-full bg-white shadow-md rounded-xl">
+                        <div className="overflow-y-scroll h-52">
+          
+                            <table className="min-w-full bg-white shadow-md rounded-xl">
                             <thead>
-                                <tr class="bg-blue-gray-100 text-gray-600">
-                                <th class="py-3 px-4 text-left text-sm text-gray-600">Producto</th>
-                                <th class="py-3 px-4 text-left text-sm text-gray-600">Precio</th>
-                                <th class="py-3 px-4 text-left text-sm text-gray-600">Cantidad</th>
-                                <th class="py-3 px-4 text-left text-sm text-gray-600">Total</th>
+                                <tr className="bg-blue-gray-100 text-gray-600">
+                                <th className="py-3 px-4 text-left text-sm text-gray-600">Producto</th>
+                                <th className="py-3 px-4 text-left text-sm text-gray-600">Precio</th>
+                                <th className="py-3 px-4 text-left text-sm text-gray-600">Cantidad</th>
+                                <th className="py-3 px-4 text-left text-sm text-gray-600">Total</th>
                                 </tr>
                             </thead>
-                            <tbody class="text-blue-gray-900"> 
+                            <tbody className="text-blue-gray-900">
+                            {
+                                Object.values(productosPedido).map(producto =>  {
+                                    return <ElementProduct producto={producto}/>
+                                })
+                            }  
                             </tbody>
                             </table>
                         </div>
+                            <tr className="border-b border-blue-gray-200" id="new-product">
+                                <td>
+                                    <input value={nombreProducto} onChange={handleOnChange} type="text" id="nombreProducto" name="nombreProducto" className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500"/>
+                                </td>
+                                <td>
+                                    <input value={precioProducto} onChange={handleOnChange} type="email" id="precioProducto" name="precioProducto" className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500 "/>
+                                </td>
+                                <td>
+                                    <input type="number" alue={cantidadProducto} onChange={handleOnChange} id="cantidadProducto" name="cantidadProducto" className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500 "/>
+                                </td>
+                                <td className="py-3 px-4">
+                                    Total
+                                </td>
+                            </tr>
                     </div>
-                    <div className="mb-4 flex items-center gap-4">
-                        <label for="nombre" className="block text-sm text-gray-600">Monto Total</label>
-                        {<h2></h2>}
+                    <div className="mb-4 flex items-center justify-between gap-4">
+                        <div className="add">
+                            <button
+                            className="middle none center mr-4 rounded-lg bg-green-500 py-2 px-4 font-sans text-xs font-bold uppercase text-white shadow-md shadow-green-500/20 transition-all hover:shadow-lg hover:shadow-green-500/40 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
+                            data-ripple-light="true"
+                            onClickCapture={handleAddProduct}
+                            >
+                                Agregar
+                            </button>
+                        </div>
+                        <div>
+                            <label for="nombre" className="block text-sm text-gray-600">Monto Total</label>
+                            {<h2>212ssda2</h2>}
+                        </div>
                     </div>
                     <div className="mb-4">
                         <label for="nombre-cliente" className="block  mb-2 text-sm text-gray-600">Comentarios</label>

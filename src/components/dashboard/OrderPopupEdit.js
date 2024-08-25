@@ -2,7 +2,6 @@ import React from "react";
 import ElementProduct from "./element_product";
 
 function OrderPopup(props) {
-    console.log(props.order)
     const [nombreCliente, setNombreCliente] = React.useState(props.order.cliente.nombre)
     const [nombreVendedor, setNombreVendedor] = React.useState(props.order.nombre_vendedor)
     const [fechaPromesa, setFechaPromesa] = React.useState(props.order.fecha_promesa)
