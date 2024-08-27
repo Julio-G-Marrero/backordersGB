@@ -1,0 +1,16 @@
+{
+  "files": {
+    "main.css": "//julio-g-marrero.github.io/.github.io/backorders/static/css/main.0dc474ab.css",
+    "main.js": "//julio-g-marrero.github.io/.github.io/backorders/static/js/main.ed81c4c1.js",
+    "static/js/453.4a7eb50c.chunk.js": "//julio-g-marrero.github.io/.github.io/backorders/static/js/453.4a7eb50c.chunk.js",
+    "static/media/logo.png": "//julio-g-marrero.github.io/.github.io/backorders/static/media/logo.db486b8f34db0a499f4e.png",
+    "index.html": "//julio-g-marrero.github.io/.github.io/backorders/index.html",
+    "main.0dc474ab.css.map": "//julio-g-marrero.github.io/.github.io/backorders/static/css/main.0dc474ab.css.map",
+    "main.ed81c4c1.js.map": "//julio-g-marrero.github.io/.github.io/backorders/static/js/main.ed81c4c1.js.map",
+    "453.4a7eb50c.chunk.js.map": "//julio-g-marrero.github.io/.github.io/backorders/static/js/453.4a7eb50c.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.0dc474ab.css",
+    "static/js/main.ed81c4c1.js"
+  ]
+}
