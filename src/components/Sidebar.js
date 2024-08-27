@@ -1,5 +1,6 @@
 import React from "react";
 import logo from '../images/logo.png';
+import { NavLink } from 'react-router-dom';
 
 function Sidebar() {
     return(
@@ -28,9 +29,9 @@ function Sidebar() {
                     ></path>
                   </svg>
                 </span>
-                <a href="#">
-                  <span class="ml-2">Dashboard</span>
-                </a>
+                <div>
+                  <NavLink to="/dashboard" className="ml-2">Dashboard</NavLink>
+                </div>
               </li>
               <li class="mb-2 px-4 py-4 text-gray-100 flex flex-row  border-gray-300 hover:text-black   hover:bg-gray-300 hover:cursor-pointer hover:font-bold rounded rounded-lg">
                 <span>

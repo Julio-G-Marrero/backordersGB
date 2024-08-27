@@ -60,6 +60,17 @@ function OrdersTable(props){
         setIsActivePopupOrderCreate(false)
         setOverlay(!overlay)
     }
+    function isDataInitial(){
+        if(props.orders == undefined){
+            return(<h2 className="flex"> No hay Ordenes registradas</h2>)
+        }else {
+            return(
+                Object.values(props.orders).map(order =>  {
+                    return <ElementTable overlay={overlay} setOverlay={setOverlay} closehandleOrder={closehandleOrder} handleOrderSelected={handleOrderSelected} order={order}/>
+                })
+            )
+        }
+    }
     return(
         <>
         <div className="bg-white border border-gray-100 shadow-md shadow-black/5 p-6 rounded-md">
@@ -86,11 +97,10 @@ function OrdersTable(props){
                         </tr>
                     </thead>
                     <tbody>
-                    {
-                        Object.values(props.orders).map(order =>  {
-                            return <ElementTable overlay={overlay} setOverlay={setOverlay} closehandleOrder={closehandleOrder} handleOrderSelected={handleOrderSelected} order={order}/>
-                        })
-                    }      
+                    {isDataInitial()}
+                    {/* {
+  
+                    }       */}
                     </tbody>
                 </table>
             </div>
@@ -99,7 +109,7 @@ function OrdersTable(props){
             <OrderPopupEdit order={orderSelected} isActivePopupOrder={isActivePopupOrder}/>
         </div>
         <div className={isActivePopupOrderCreate ? 'block' : 'hidden'}>
-            <OrderPopupCreate isActivePopupOrderCreate={isActivePopupOrderCreate}/>
+            <OrderPopupCreate orders={props.orders} closeAllPopups={closeAllPopups} setOrders={props.setOrders} isActivePopupOrderCreate={isActivePopupOrderCreate}/>
         </div>
         <div 
             className={overlay ? 'overlay' : 'overlay hidden'}

@@ -1,65 +1,175 @@
 import React from "react";
 import ElementProduct from "./element_product";
 
-function OrderPopupCreate() {
-    const initialProductos = [
-        {
-            "nombre": "Abrazadera F 120x300 mm",
-            "precio": "359.83",
-            "cantidad":"5"
-        }
-    ]
-    const [productosPedido, setProductosPedidos] = React.useState(initialProductos)
-    const [nombreProducto, setNombreProducto] = React.useState()
-    const [precioProducto, setPrecioProducto] = React.useState()
-    const [cantidadProducto, setCantidadProducto] = React.useState()
-  
+function OrderPopupCreate(props) {
+    const [nombreCliente, setNombreCliente] = React.useState("")
+    const [telefonoCliente, setTelefonoCliente] = React.useState("")
+    const [emailCliente, setEmailCliente] = React.useState("")
+    const [ubicacionCliente, setUbicacionCliente] = React.useState("")
+    const [fechaPromesa, setFechaPromesa] = React.useState()
+    const [comentarios, setComentarios] = React.useState()
 
+    const [productosPedido, setProductosPedidos] = React.useState([])
+    const [nombreProducto, setNombreProducto] = React.useState("")
+    const [skuProducto, setSkuProducto] = React.useState("")
+    const [precioProducto, setPrecioProducto] = React.useState(0)
+    const [cantidadProducto, setCantidadProducto] = React.useState(0)
+    const [totalMonto, setTotalMonto] = React.useState(0)
+
+    const initialOrders = props.orders;
+    const to_day = new Date();
+    const day = to_day.getDate();
+    const month = to_day.getMonth()+1;
+    let  actual_date = "";
+    const year =  to_day.getFullYear();
+    if(month <= 9) {
+        actual_date = String(year +'-0'+month+'-'+day);
+    }else {
+        actual_date = String(year +'-'+month+'-'+day);
+    }
     function handleAddProduct(e) {
         e.preventDefault()
-        if(nombreProducto !== "" && precioProducto !== "" && cantidadProducto !== "") {
+        if(nombreProducto !== "" && precioProducto !== 0 && cantidadProducto !== 0) {
             setProductosPedidos([{
+                'idProducto':Math.floor(Math.random() * 1000000),
+                "sku":skuProducto,
                 "nombre": nombreProducto,
                 "precio": precioProducto,
                 "cantidad":cantidadProducto
                 }, ...productosPedido]);
+                setNombreProducto("")
+                setPrecioProducto(0)
+                setCantidadProducto(0)
+                setSkuProducto("")
+
         }else{
             alert('Hace falta un campo')
         }
     }
+    function handleDeleteProducto(productElement){
+        const idProducto = productElement.idProducto;
+        const cleanProducts = productosPedido.filter(item => item.idProducto !== idProducto);
+        setProductosPedidos(cleanProducts)
+    }
     function handleOnChange(e) {
-        if(e.target.id === "nombreProducto") {
+        if(e.target.id === "nombreProducto"){
             setNombreProducto(e.target.value)
         }else if(e.target.id === "precioProducto"){
             setPrecioProducto(e.target.value)
         }else if(e.target.id === "cantidadProducto"){
             setCantidadProducto(e.target.value)
+        }else if(e.target.id === "nombre-cliente"){
+            setNombreCliente(e.target.value)
+        }else if(e.target.id === "emialCliente"){
+            setEmailCliente(e.target.value)
+        }else if(e.target.id === "numeroTel"){
+            setTelefonoCliente(e.target.value)
+        }else if(e.target.id === "ubicacion-cliente"){
+            setUbicacionCliente(e.target.value)
+        }else if(e.target.id === "fechaPromesa"){
+            setFechaPromesa(e.target.value)
+        }else if(e.target.id === "skuProducto"){
+            setSkuProducto(e.target.value)
+        }else if(e.target.id === "comentarios"){
+            setComentarios(e.target.value)
+        }
+        
+    }
+    function handleCleanForm(){
+        setNombreCliente("")
+        setPrecioProducto(0)
+        setCantidadProducto(0)
+        setTelefonoCliente("")
+        setEmailCliente("")
+        setUbicacionCliente("")
+        setFechaPromesa("")
+        setProductosPedidos([])
+        setTotalMonto(0)
+        setSkuProducto("")
+        setComentarios("")
+    }
+    function countQtyProducts(){
+        let totalProductos = 0
+        Object.values(productosPedido).map(producto => 
+            totalProductos = totalProductos + parseInt(producto.cantidad)
+        )
+        return totalProductos
+    }
+    React.useEffect(() => {
+        let totalMonto = 0
+        Object.values(productosPedido).map(producto => 
+            totalMonto = totalMonto + (parseFloat(producto.precio) * parseFloat(producto.cantidad))
+        )
+        setTotalMonto(totalMonto)
+    },[productosPedido])
+    function handleCardCreate(e){
+        e.preventDefault()
+        if(productosPedido.length <= 0){
+            alert('Es necesario agregar por lo menos un producto.')
+        }else if(nombreCliente !== "" && telefonoCliente !== 0 && emailCliente !== 0 && ubicacionCliente !== 0){
+            const newOrder = {
+                "id": '1',
+                "id_vendedor": '1',
+                "nombre_vendedor": 'Julio',
+                "fecha_apertura": actual_date,
+                "numero_tkt": '1845',
+                "productos": productosPedido,
+                "cliente": {
+                    "contact": {
+                        "email": emailCliente,
+                        "tel": telefonoCliente
+                    },
+                    "ubicacion": ubicacionCliente,
+                    "nombre": nombreCliente
+                },
+                "cantidad_productos": countQtyProducts(),
+                "id_estatus": '1',
+                "estatus_venta": 'Creado',
+                "fecha_promesa": fechaPromesa,
+                "precio_pactado": totalMonto,
+                "comentarios": comentarios,
+                "id_ordenCompra": "n/a",
+                "cantidad_entregada": "0",
+                "fecha_entregado": "n/a",
+            }
+            if(initialOrders === undefined){
+                props.setOrders([newOrder])
+            }else {
+                props.setOrders([newOrder, ...initialOrders])
+            }
+            props.closeAllPopups()
+            alert('La orden se alamceno correctamente')
+            handleCleanForm()
         }
     }
     return(
         <>
             <div className="popup absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
-                <div className="max-w-md w-full p-6 bg-white rounded-lg shadow-lg m-20">
+                <div className="max-w-5xl w-full p-10 bg-white rounded-lg shadow-lg m-20">
                 <h1 className="items-center text-2xl font-semibold text-gray-500 mt-1 mb-2">Crear Orden</h1>
                 <form className="text-left">
                     <div className="mb-4">
                         <label for="nombre-cliente" className="block  mb-2 text-sm text-gray-600">Nombre Cliente</label>
-                        <input type="text" id="nombre-cliente" name="nombre-cliente" className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500"/>
+                        <input type="text" id="nombre-cliente" value={nombreCliente} onChange={handleOnChange} name="nombre-cliente" className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500"/>
                     </div>
                     <div className="clienteInfo grid grid-cols-2 gap-4">
                         <div className="mb-4">
                             <label for="numeroTel" className="block mb-2 text-sm text-gray-600">Tel Cliente</label>
-                            <input type="text" id="numeroTel" name="numeroTel" className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500"/>
+                            <input type="text" value={telefonoCliente} onChange={handleOnChange} id="numeroTel" name="numeroTel" className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500"/>
                         </div>
                         <div className="mb-4">
                             <label for="emialCliente" className="block mb-2 text-sm text-gray-600">Email Cliente</label>
-                            <input type="email" id="emialCliente" name="emialCliente" className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500 "/>
+                            <input type="text" value={emailCliente} onChange={handleOnChange} id="emialCliente" name="emialCliente" className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500 "/>
                         </div>
                     </div>
                     <div className="fechas grid grid-cols-2 gap-4">
                         <div className="mb-4">
-                            <label for="date" className="block mb-2 text-sm text-gray-600">Fecha Promesa</label>
-                            <input type="date" id="date" name="date" className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500"/>
+                            <label for="fechaPromesa" className="block mb-2 text-sm text-gray-600">Fecha Promesa</label>
+                            <input type="date" value={fechaPromesa} onChange={handleOnChange} id="fechaPromesa" name="fechaPromesa" className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500"/>
+                        </div>
+                        <div className="mb-4">
+                            <label for="date" className="block mb-2 text-sm text-gray-600">Ubicacion Cliente</label>
+                            <input type="text" value={ubicacionCliente} onChange={handleOnChange} id="ubicacion-cliente" name="ubicacion-cliente" className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500"/>
                         </div>
                     </div>
                     <div className="product-list">
@@ -68,6 +178,7 @@ function OrderPopupCreate() {
                             <table className="min-w-full bg-white shadow-md rounded-xl">
                             <thead>
                                 <tr className="bg-blue-gray-100 text-gray-600">
+                                <th className="py-3 px-4 text-left text-sm text-gray-600">SKU</th>
                                 <th className="py-3 px-4 text-left text-sm text-gray-600">Producto</th>
                                 <th className="py-3 px-4 text-left text-sm text-gray-600">Precio</th>
                                 <th className="py-3 px-4 text-left text-sm text-gray-600">Cantidad</th>
@@ -77,26 +188,26 @@ function OrderPopupCreate() {
                             <tbody className="text-blue-gray-900">
                             {
                                 Object.values(productosPedido).map(producto =>  {
-                                    return <ElementProduct producto={producto}/>
+                                    return <ElementProduct producto={producto} handleDeleteProducto={handleDeleteProducto} isCreatePopup={true}/>
                                 })
                             }  
                             </tbody>
                             </table>
                         </div>
-                            <tr className="border-b border-blue-gray-200" id="new-product">
-                                <td>
+                            <div className="flex border-b justify-around border-blue-gray-200 gap-2" id="new-product">
+                                <div>
+                                    <input value={skuProducto} onChange={handleOnChange} type="text" id="skuProducto" name="skuProducto" className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500"/>
+                                </div>
+                                <div className="flex-1">
                                     <input value={nombreProducto} onChange={handleOnChange} type="text" id="nombreProducto" name="nombreProducto" className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500"/>
-                                </td>
-                                <td>
-                                    <input value={precioProducto} onChange={handleOnChange} type="email" id="precioProducto" name="precioProducto" className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500 "/>
-                                </td>
-                                <td>
-                                    <input type="number" alue={cantidadProducto} onChange={handleOnChange} id="cantidadProducto" name="cantidadProducto" className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500 "/>
-                                </td>
-                                <td className="py-3 px-4">
-                                    Total
-                                </td>
-                            </tr>
+                                </div>
+                                <div>
+                                    <input value={precioProducto} onChange={handleOnChange} type="number" id="precioProducto" name="precioProducto" className="w-32 px-2 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500 "/>
+                                </div>
+                                <div>
+                                    <input type="number" value={cantidadProducto} onChange={handleOnChange} id="cantidadProducto" name="cantidadProducto" className="w-16 text-center px-2 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500 "/>
+                                </div>
+                            </div>
                     </div>
                     <div className="mb-4 flex items-center justify-between gap-4">
                         <div className="add">
@@ -110,14 +221,16 @@ function OrderPopupCreate() {
                         </div>
                         <div>
                             <label for="nombre" className="block text-sm text-gray-600">Monto Total</label>
-                            {<h2>212ssda2</h2>}
+                            <h2>{totalMonto}</h2>
                         </div>
                     </div>
                     <div className="mb-4">
                         <label for="nombre-cliente" className="block  mb-2 text-sm text-gray-600">Comentarios</label>
-                        <textarea type="text" id="nombre-cliente" name="nombre-cliente" className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500"/>
+                        <textarea type="text" value={comentarios} onChange={handleOnChange} id="comentarios" name="comentarios" className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500"/>
                     </div>
-                    <button type="submit" className="w-32 background-globalcar text-white py-2 rounded-lg mx-auto block focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cyan-500 mb-2">Registro</button>
+                    <button type="submit" className="w-32 background-globalcar text-white py-2 rounded-lg mx-auto block focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cyan-500 mb-2"
+                    onClick={handleCardCreate}
+                    >Registro</button>
                 </form>
                 </div>
             </div>

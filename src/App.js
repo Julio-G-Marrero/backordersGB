@@ -5,6 +5,7 @@ import { BrowserRouter, Route } from 'react-router-dom';
 import Login from './components/Login';
 import Sidebar from './components/Sidebar'
 import Dashboard from './components/Dashboard'
+import Ordenes from './components/Ordenes'
 import { OrdersContext } from './contexts/OrdersContext';
 
 
@@ -93,7 +94,7 @@ function App() {
       "fecha_entregado": "2024-07-10",
     }
   ]
-  const [orders, setOrders] = React.useState(dataApi);
+  const [orders, setOrders] = React.useState();
 
   return (
     <BrowserRouter>
@@ -108,11 +109,20 @@ function App() {
                 <Sidebar /> 
               </div>
               <div className="basis-10/12 mx-auto">
-                <Dashboard />
+                <Dashboard orders={orders} setOrders={setOrders} />
               </div>
             </div>
           </Route>
-
+          <Route exact path="/ordenes">
+          <div className="flex flex-row">
+              <div className="basis-1/12">
+                <Sidebar /> 
+              </div>
+              <div className="basis-10/12 mx-auto">
+                <Ordenes orders={orders} setOrders={setOrders}/>
+              </div>
+            </div>
+          </Route> 
         </OrdersContext.Provider>
       </div>
     </BrowserRouter>

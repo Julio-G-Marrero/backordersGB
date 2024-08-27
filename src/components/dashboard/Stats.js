@@ -12,7 +12,7 @@ function Stats(){
             
                             </div>
                             <div className="flex flex-col my-7">
-                                <span className="text-secondary-inverse text-4xl tracking-[-0.115rem] font-bold">3</span>
+                                <span className="text-secondary-inverse text-4xl tracking-[-0.115rem] font-bold">0</span>
                                 <div className="m-0">
                                     <span className="font-medium text-secondary-dark text-lg/normal">Ordenes Ptes Surtir</span>
                                 </div>
@@ -27,7 +27,7 @@ function Stats(){
                                 
                             </div>
                             <div className="flex flex-col my-7">
-                                <span className="text-secondary-inverse text-4xl tracking-[-0.115rem] font-bold">2</span>
+                                <span className="text-secondary-inverse text-4xl tracking-[-0.115rem] font-bold">0</span>
                                 <div className="m-0">
                                     <span className="font-medium text-secondary-dark text-lg/normal">Ordenes Ptes Recolectar</span>
                                 </div>
@@ -42,7 +42,7 @@ function Stats(){
                         
                             </div>
                             <div className="flex flex-col my-7">
-                                <span className="text-secondary-inverse text-4xl tracking-[-0.115rem] font-bold">5</span>
+                                <span className="text-secondary-inverse text-4xl tracking-[-0.115rem] font-bold">0</span>
                                 <div className="m-0">
                                     <span className="font-medium text-secondary-dark text-lg/normal">Ordenes Cerradas</span>
                                 </div>
@@ -57,7 +57,7 @@ function Stats(){
             
                             </div>
                             <div className="flex flex-col my-7">
-                                <span className="text-secondary-inverse text-4xl tracking-[-0.115rem] font-bold">77k</span>
+                                <span className="text-secondary-inverse text-4xl tracking-[-0.115rem] font-bold">0</span>
                                 <div className="m-0">
                                     <span className="font-medium text-secondary-dark text-lg/normal">Venta Acumulada</span>
                                 </div>

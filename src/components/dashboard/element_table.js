@@ -2,7 +2,6 @@ import React from "react";
 
 function ElementTable(props){
     const order = props.order;
-
     function handleOpenOrder(){
         props.handleOrderSelected(order)
         props.setOverlay(!props.overlay)
